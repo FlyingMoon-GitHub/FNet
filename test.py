@@ -95,5 +95,5 @@ if __name__ == '__main__':
     test_result = test(args, model=model, dataloader=test_dataloader, type='test')
     test_aux_acc = test_result['test_aux_acc']
     test_prim_acc = test_result['test_prim_acc']
-    print('val_aux_acc: {:6.4f}, val_prim_acc: {:6.4f}.'
+    print('test_aux_acc: {:6.4f}, test_prim_acc: {:6.4f}.'
           .format(test_aux_acc, test_prim_acc))
