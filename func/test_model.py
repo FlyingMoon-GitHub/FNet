@@ -58,6 +58,9 @@ def test(args, model, dataloader, type):
 
             loss += prim_loss * args.lambda_
 
+            if args.cuda:
+                loss = loss.cuda()
+
             loss_records.append(loss.detach().item())
 
             print(type + '_step: {:-8d} / {:d}, loss: {:6.4f}, aux_loss: {:6.4f}, prim_loss: {:6.4f}.'

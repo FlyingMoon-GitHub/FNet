@@ -66,6 +66,9 @@ def train(args, model, optimizer, learning_rate_scheduler, dataloaders):
 
             loss += prim_loss * args.lambda_
 
+            if args.cuda:
+                loss = loss.cuda()
+
             loss.backward()
 
             if args.cuda:
@@ -105,4 +108,3 @@ def train(args, model, optimizer, learning_rate_scheduler, dataloaders):
 
         if args.cuda:
             torch.cuda.empty_cache()
-
