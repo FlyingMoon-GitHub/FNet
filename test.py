@@ -86,11 +86,11 @@ if __name__ == '__main__':
     else:
         model.apply(weightInit)
 
+    model.summary()
+
     if args.cuda:
         model = model.cuda()
         model = nn.DataParallel(model)
-
-    model.summary()
 
     test_result = test(args, model=model, dataloader=test_dataloader, type='test')
 
