@@ -13,7 +13,7 @@ def train(args, model, optimizer, learning_rate_scheduler, dataloaders):
     loss_records = []
 
     if not os.path.exists(args.save_dir):
-        os.mkdir(args.save_dir)
+        os.makedirs(args.save_dir)
 
     train_batch_size = dataloaders['train'].batch_size
     train_epoch_step = len(dataloaders['train'])
