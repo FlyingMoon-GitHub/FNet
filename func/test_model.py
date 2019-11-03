@@ -70,7 +70,7 @@ def test(args, model, dataloader, type):
     val_prim_acc = val_prim_correct / data_num
 
     result['loss_records'] = loss_records
-    result['val_aux_acc'] = val_aux_acc
-    result['val_prim_acc'] = val_prim_acc
+    result[type + '_aux_acc'] = val_aux_acc
+    result[type + 'val_prim_acc'] = val_prim_acc
 
     return result
