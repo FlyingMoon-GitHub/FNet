@@ -102,7 +102,6 @@ class UFNet(nn.Module):
         aux_out = aux_out.view(aux_out.size(0), -1)
         # print('view_aux', aux_out.shape)
         aux_out = self.fc_aux(aux_out)
-        aux_out = self.relu(aux_out)
         # print('fc_aux', aux_out.shape)
 
         # Primary Pathway
@@ -145,7 +144,6 @@ class UFNet(nn.Module):
         prim_out = prim_out.view(prim_out.size(0), -1)
         # print('view_prim', prim_out.shape)
         prim_out = self.fc_prim(prim_out)
-        prim_out = self.relu(prim_out)
         # print('fc_prim', prim_out.shape)
 
         return aux_out, prim_out

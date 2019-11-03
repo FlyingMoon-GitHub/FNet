@@ -114,8 +114,6 @@ if __name__ == '__main__':
     elif args.model == 'bfnet':
         model = BFNet(model_config)
 
-
-
     if args.savepoint_file:
         model_dict = model.state_dict()
         model_dict.update(torch.load(args.savepoint_file))
