@@ -1,0 +1,4 @@
+0 Cancer
+1 HSIL
+2 LSIL
+3 No_Biopsy
