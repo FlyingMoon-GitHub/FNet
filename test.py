@@ -29,7 +29,7 @@ if __name__ == '__main__':
                         default=512, type=int)
 
     parser.add_argument('--model', dest='model',
-                        default='bfnet', type=str)
+                        default='ufnet', type=str)
     parser.add_argument('--class_num', dest='class_num',
                         default=4, type=int)
     parser.add_argument('--lambda', dest='lambda_',
@@ -43,7 +43,7 @@ if __name__ == '__main__':
     parser.add_argument('--test_num_workers', dest='test_num_workers',
                         default=32, type=int)
     parser.add_argument('--cuda', dest='cuda',
-                        default=True, type=bool)
+                        default=torch.cuda.is_available(), type=bool)
 
     parser.add_argument('--savepoint_file', dest='savepoint_file',
                         default=None, type=str)
@@ -95,5 +95,11 @@ if __name__ == '__main__':
     test_result = test(args, model=model, dataloader=test_dataloader, type='test')
     test_aux_acc = test_result['test_aux_acc']
     test_prim_acc = test_result['test_prim_acc']
+    test_aux_cfs_mat = test_result['test_aux_cfs_mat']
+    test_prim_cfs_mat = test_result['test_prim_cfs_mat']
     print('test_aux_acc: {:6.4f}, test_prim_acc: {:6.4f}.'
           .format(test_aux_acc, test_prim_acc))
+    print('test_aux_cfs_mat')
+    print(test_aux_cfs_mat)
+    print('test_prim_cfs_mat')
+    print(test_prim_cfs_mat)

@@ -18,8 +18,12 @@ def test(args, model, dataloader, type):
     epoch_step = len(dataloader)
     data_num = len(dataloader.dataset)
 
-    val_aux_correct = 0
-    val_prim_correct = 0
+    aux_correct = 0
+    prim_correct = 0
+
+    class_num = args.class_num
+    aux_confusion_matrix = [[0] * class_num for _ in range(class_num)]
+    prim_confusion_matrix = [[0] * class_num for _ in range(class_num)]
 
     model.train(False)
 
@@ -61,16 +65,22 @@ def test(args, model, dataloader, type):
                           prim_loss.detach().item()), flush=True)
 
             _, aux_pred = torch.topk(aux_out, 1)
-            val_aux_correct += torch.sum((aux_pred[:, 0] == labels)).data.item()
+            aux_correct += torch.sum((aux_pred[:, 0] == labels)).data.item()
 
             _, prim_pred = torch.topk(prim_out, 1)
-            val_prim_correct += torch.sum((prim_pred[:, 0] == labels)).data.item()
+            prim_correct += torch.sum((prim_pred[:, 0] == labels)).data.item()
 
-    val_aux_acc = val_aux_correct / data_num
-    val_prim_acc = val_prim_correct / data_num
+            for i in range(labels.shape[0]):
+                aux_confusion_matrix[labels[i]][aux_pred[i, 0]] += 1
+                prim_confusion_matrix[labels[i]][prim_pred[i, 0]] += 1
+
+    aux_acc = aux_correct / data_num
+    prim_acc = prim_correct / data_num
 
     result['loss_records'] = loss_records
-    result[type + '_aux_acc'] = val_aux_acc
-    result[type + 'val_prim_acc'] = val_prim_acc
+    result[type + '_aux_acc'] = aux_acc
+    result[type + '_prim_acc'] = prim_acc
+    result[type + '_aux_cfs_mat'] = aux_confusion_matrix
+    result[type + '_prim_cfs_mat'] = prim_confusion_matrix
 
     return result

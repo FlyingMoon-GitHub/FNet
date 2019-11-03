@@ -63,7 +63,7 @@ if __name__ == '__main__':
     parser.add_argument('--val_num_workers', dest='val_num_workers',
                         default=32, type=int)
     parser.add_argument('--cuda', dest='cuda',
-                        default=True, type=bool)
+                        default=torch.cuda.is_available(), type=bool)
 
     parser.add_argument('--savepoint_file', dest='savepoint_file',
                         default=None, type=str)
