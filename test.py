@@ -93,6 +93,7 @@ if __name__ == '__main__':
     model.summary()
 
     test_result = test(args, model=model, dataloader=test_dataloader, type='test')
+
     test_aux_acc = test_result['test_aux_acc']
     test_prim_acc = test_result['test_prim_acc']
     test_aux_cfs_mat = test_result['test_aux_cfs_mat']
