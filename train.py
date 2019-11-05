@@ -114,15 +114,17 @@ if __name__ == '__main__':
     elif args.model == 'bfnet':
         model = BFNet(model_config)
 
-    if args.savepoint_file:
-        model_dict = model.state_dict()
-        model_dict.update(torch.load(args.savepoint_file))
-        model.load_state_dict({(k if args.cuda else k.replace('module.','')):v for k,v in model_dict})
-    else:
-        model.apply(weightInit)
-
     if args.cuda:
         model = model.cuda()
+
+    if args.savepoint_file:
+        model_dict = model.state_dict()
+        model_dict.update(
+            {(k if args.cuda else k.replace('module.', '')): v for k, v in
+             torch.load(args.savepoint_file)['state_dict'].items()})
+        model.load_state_dict(model_dict)
+    else:
+        model.apply(weightInit)
 
     model.summary()
 
