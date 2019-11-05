@@ -12,6 +12,7 @@ class UFNet(nn.Module):
 
         self.target_size = (3, config['target_size'], config['target_size'])
         self.class_num = config['class_num']
+        self.cuda = config['cuda']
 
         self.relu = nn.ReLU()
 
@@ -41,6 +42,7 @@ class UFNet(nn.Module):
 
         self.avg_pool_prim = nn.AvgPool2d(kernel_size=16, stride=1)
         self.fc_prim = nn.Linear(in_features=2048, out_features=self.class_num)
+
 
     def _bottleneck_layers(self, in_channels, final_out_channels, stride=1, loops=1):
 
@@ -149,4 +151,4 @@ class UFNet(nn.Module):
         return aux_out, prim_out
 
     def summary(self):
-        summary(self, [self.target_size, self.target_size])
+        summary(self, [self.target_size, self.target_size], device="cuda" if self.cuda else "cpu")

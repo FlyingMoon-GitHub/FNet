@@ -47,12 +47,7 @@ class MyDataset(Dataset):
                 os.path.join(self.root_path, self.image_dir, self.anno[index][0], image_view + '.' + self.image_format))
             images.append(image.convert('RGB'))
 
-        '''
-        inconform data augmentation arguments in the same sample group.
-        '''
-
-        cur_aug = self.img_aug
-        images = [cur_aug(image) for image in images]
+        images = self.img_aug(images)
 
         return images[1 - self.prim_view], images[self.prim_view], self.anno[index][1]
 

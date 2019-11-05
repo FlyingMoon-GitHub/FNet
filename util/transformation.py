@@ -1,6 +1,59 @@
 # -*- coding: utf-8 -*-
 
+import copy
+import random
 from torchvision import transforms
+from torchvision.transforms import functional as F
+from PIL import Image
+
+class MyTransformation(object):
+    def __init__(self, transformation_list):
+        self.transformation_list = transformation_list
+
+    def __call__(self, imgs):
+        assert len(imgs) >= 1
+        size = None
+        for img_no, img in enumerate(imgs):
+            assert isinstance(img, Image.Image)
+            if img_no == 0:
+                size = img.size
+            else:
+                assert size == img.size
+
+        trans_imgs = copy.deepcopy(imgs)
+
+        for trans in self.transformation_list:
+            if isinstance(trans, transforms.RandomRotation):
+                angle = trans.get_params(trans.degrees)
+                for img_no, trans_img in enumerate(trans_imgs):
+                    trans_imgs[img_no] = F.rotate(trans_img, angle, trans.resample, trans.expand, trans.center)
+            elif isinstance(trans, transforms.RandomResizedCrop):
+                i, j, h, w = trans.get_params(trans_imgs[0], trans.scale, trans.ratio)
+                for img_no, trans_img in enumerate(trans_imgs):
+                    trans_imgs[img_no] = F.resized_crop(trans_img, i, j, h, w, trans.size, trans.interpolation)
+            elif isinstance(trans, transforms.ColorJitter):
+                color_transform = trans.get_params(trans.brightness, trans.contrast,
+                                                   trans.saturation, trans.hue)
+                for img_no, trans_img in enumerate(trans_imgs):
+                    trans_imgs[img_no] = color_transform(trans_img)
+            elif isinstance(trans, transforms.RandomHorizontalFlip):
+                random_value = random.random()
+                if random_value < trans.p:
+                    for img_no, trans_img in enumerate(trans_imgs):
+                        trans_imgs[img_no] = F.hflip(trans_img)
+            elif isinstance(trans, transforms.RandomVerticalFlip):
+                random_value = random.random()
+                if random_value < trans.p:
+                    for img_no, trans_img in enumerate(trans_imgs):
+                        trans_imgs[img_no] = F.vflip(trans_img)
+            elif isinstance(trans, (transforms.Resize, transforms.ToTensor, transforms.Normalize)):
+                for img_no, trans_img in enumerate(trans_imgs):
+                    trans_imgs[img_no] = trans(trans_img)
+            else:
+                print(trans)
+                raise NotImplementedError()
+        return trans_imgs
+
 
 def getTransformation(args, type):
     assert type in ['train', 'val', 'test']
@@ -17,6 +70,7 @@ def getTransformation(args, type):
     transformation_list.append(transforms.Resize((args.target_size, args.target_size)))
     transformation_list.append(transforms.ToTensor()),
     transformation_list.append(transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]))
-    transformation = transforms.Compose(transformation_list)
+
+    transformation = MyTransformation(transformation_list)
 
     return transformation
