@@ -15,10 +15,10 @@ class MyTransformation(object):
         size = None
         for img_no, img in enumerate(imgs):
             assert isinstance(img, Image.Image)
-            if img_no == 0:
-                size = img.size
-            else:
-                assert size == img.size
+        #     if img_no == 0:
+        #         size = img.size
+        #     else:
+        #         assert size == img.size
 
         trans_imgs = copy.deepcopy(imgs)
 
