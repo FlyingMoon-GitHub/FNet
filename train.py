@@ -117,7 +117,7 @@ if __name__ == '__main__':
     if args.savepoint_file:
         model_dict = model.state_dict()
         model_dict.update(torch.load(args.savepoint_file))
-        model.load_state_dict(model_dict)
+        model.load_state_dict({(k if args.cuda else k.replace('module.','')):v for k,v in model_dict})
     else:
         model.apply(weightInit)
 
