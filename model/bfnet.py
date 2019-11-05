@@ -170,4 +170,4 @@ class BFNet(nn.Module):
         return aux_out, prim_out
 
     def summary(self):
-        summary(self, [self.target_size, self.target_size], device="cuda" if self.cuda else "cpu")
+        summary(self, [self.target_size, self.target_size], device="cuda" if self.use_cuda else "cpu")
