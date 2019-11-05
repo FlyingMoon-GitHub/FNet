@@ -37,7 +37,7 @@ def test(args, model, dataloader, type):
 
             aux_views, prim_views, labels = data
 
-            if args.cuda:
+            if args.use_cuda:
                 aux_views = Variable(aux_views.cuda())
                 prim_views = Variable(prim_views.cuda())
                 labels = Variable(labels.cuda()).long()
@@ -58,7 +58,7 @@ def test(args, model, dataloader, type):
 
             loss += prim_loss * args.lambda_
 
-            if args.cuda:
+            if args.use_cuda:
                 loss = loss.cuda()
 
             loss_records.append(loss.detach().item())

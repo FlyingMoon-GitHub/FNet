@@ -62,7 +62,7 @@ if __name__ == '__main__':
                         default=16, type=int)
     parser.add_argument('--val_num_workers', dest='val_num_workers',
                         default=32, type=int)
-    parser.add_argument('--cuda', dest='cuda',
+    parser.add_argument('--use_cuda', dest='use_cuda',
                         default=torch.cuda.is_available(), type=bool)
 
     parser.add_argument('--savepoint_file', dest='savepoint_file',
@@ -78,7 +78,7 @@ if __name__ == '__main__':
     args.save_dir = os.path.join('.', 'checkpoint', 'cervical')
     # CUSTOM SETTINGS END
 
-    args.cuda = args.cuda and torch.cuda.is_available()
+    args.use_cuda = args.use_cuda and torch.cuda.is_available()
 
     assert args.model in ['ufnet', 'bfnet']
     assert args.type in ['train', 'val']
@@ -114,13 +114,13 @@ if __name__ == '__main__':
     elif args.model == 'bfnet':
         model = BFNet(model_config)
 
-    if args.cuda:
+    if args.use_cuda:
         model = model.cuda()
 
     if args.savepoint_file:
         model_dict = model.state_dict()
         model_dict.update(
-            {(k if args.cuda else k.replace('module.', '')): v for k, v in
+            {(k if args.use_cuda else k.replace('module.', '')): v for k, v in
              torch.load(args.savepoint_file)['state_dict'].items()})
         model.load_state_dict(model_dict)
     else:
@@ -128,11 +128,11 @@ if __name__ == '__main__':
 
     model.summary()
 
-    if args.cuda:
+    if args.use_cuda:
         model = nn.DataParallel(model)
 
     optimizer = None
-    if args.cuda:
+    if args.use_cuda:
         optimizer = optim.SGD(model.module.parameters(), lr=args.learning_rate, momentum=args.momentum)
     else:
         optimizer = optim.SGD(model.parameters(), lr=args.learning_rate, momentum=args.momentum)

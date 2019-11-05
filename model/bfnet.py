@@ -12,7 +12,7 @@ class BFNet(nn.Module):
 
         self.target_size = (3, config['target_size'], config['target_size'])
         self.class_num = config['class_num']
-        self.cuda = config['cuda']
+        self.use_cuda = config['use_cuda']
 
         self.relu = nn.ReLU()
 

@@ -43,7 +43,7 @@ def train(args, model, optimizer, learning_rate_scheduler, dataloaders):
 
             aux_views, prim_views, labels = data
 
-            if args.cuda:
+            if args.use_cuda:
                 aux_views = Variable(aux_views.cuda())
                 prim_views = Variable(prim_views.cuda())
                 labels = Variable(labels.cuda()).long()
@@ -66,17 +66,17 @@ def train(args, model, optimizer, learning_rate_scheduler, dataloaders):
 
             loss += prim_loss * args.lambda_
 
-            if args.cuda:
+            if args.use_cuda:
                 loss = loss.cuda()
 
             loss.backward()
 
-            if args.cuda:
+            if args.use_cuda:
                 torch.cuda.synchronize()
 
             optimizer.step()
 
-            if args.cuda:
+            if args.use_cuda:
                 torch.cuda.synchronize()
 
             cur_time = datetime.datetime.now()
@@ -101,10 +101,10 @@ def train(args, model, optimizer, learning_rate_scheduler, dataloaders):
 
         save_path = os.path.join(args.save_dir, 'weight_epoch_' + str(epoch) + '.pth')
 
-        if args.cuda:
+        if args.use_cuda:
             torch.cuda.synchronize()
 
         torch.save(model.state_dict(), save_path)
 
-        if args.cuda:
+        if args.use_cuda:
             torch.cuda.empty_cache()
