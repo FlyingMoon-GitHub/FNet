@@ -12,6 +12,7 @@ class BFNet(nn.Module):
 
         self.target_size = (3, config['target_size'], config['target_size'])
         self.class_num = config['class_num']
+        self.cuda = config['cuda']
 
         self.relu = nn.ReLU()
 
@@ -169,4 +170,4 @@ class BFNet(nn.Module):
         return aux_out, prim_out
 
     def summary(self):
-        summary(self, [self.target_size, self.target_size])
+        summary(self, [self.target_size, self.target_size], device="cuda" if self.cuda else "cpu")
