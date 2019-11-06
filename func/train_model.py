@@ -21,8 +21,8 @@ def train(args, model, optimizer, learning_rate_scheduler, dataloaders):
     savepoint = args.savepoint
     checkpoint = args.checkpoint
     if savepoint > train_epoch_step:
-        save_point = train_epoch_step
-        checkpoint = save_point
+        savepoint = train_epoch_step
+        checkpoint = savepoint
 
     last_time, cur_time = None, datetime.datetime.now()
 
