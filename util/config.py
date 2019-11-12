@@ -34,5 +34,6 @@ def getModelConfig(args, type):
     config['lambda'] = args.lambda_
     config['target_size'] = args.target_size
     config['use_cuda'] = args.use_cuda
+    config['log_dir'] = args.log_dir
 
     return config

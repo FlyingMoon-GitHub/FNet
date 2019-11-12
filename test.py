@@ -49,6 +49,8 @@ if __name__ == '__main__':
                         default=None, type=str)
     parser.add_argument('--save_dir', dest='save_dir',
                         default=os.path.join('.', 'checkpoint'), type=str)
+    parser.add_argument('--log_dir', dest='log_dir',
+                        default=os.path.join('.', 'log'), type=str)
 
     # LACK OF TRANSFORMATION-RELATED ARGUMENTS
 
@@ -56,6 +58,7 @@ if __name__ == '__main__':
 
     # CUSTOM SETTINGS
     args.save_dir = os.path.join('.', 'checkpoint', 'cervical')
+    args.log_dir = os.path.join('.', 'log', 'cervical')
     # CUSTOM SETTINGS END
 
     args.use_cuda = args.use_cuda and torch.cuda.is_available()

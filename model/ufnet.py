@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import torch
 from torch import nn
 from torchsummary import *
+from tensorboardX import SummaryWriter
 
 from model.bottleneck import *
 
@@ -13,6 +15,7 @@ class UFNet(nn.Module):
         self.target_size = (3, config['target_size'], config['target_size'])
         self.class_num = config['class_num']
         self.use_cuda = config['use_cuda']
+        self.log_dir = config['log_dir']
 
         self.relu = nn.ReLU()
 
@@ -42,7 +45,6 @@ class UFNet(nn.Module):
 
         self.avg_pool_prim = nn.AvgPool2d(kernel_size=16, stride=1)
         self.fc_prim = nn.Linear(in_features=2048, out_features=self.class_num)
-
 
     def _bottleneck_layers(self, in_channels, final_out_channels, stride=1, loops=1):
 
@@ -152,3 +154,7 @@ class UFNet(nn.Module):
 
     def summary(self):
         summary(self, [self.target_size, self.target_size], device="cuda" if self.use_cuda else "cpu")
+
+    def saveGraph(self):
+        with SummaryWriter(comment='ufnet', log_dir=self.log_dir) as sumw:
+            sumw.add_graph(self, (torch.rand((1,) + self.target_size), torch.rand((1,) + self.target_size)))

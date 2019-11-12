@@ -3,3 +3,4 @@
 /data/**/anno
 /data/**/image
 /checkpoint/**
+/log
