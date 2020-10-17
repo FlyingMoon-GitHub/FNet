@@ -157,4 +157,8 @@ class UFNet(nn.Module):
 
     def saveGraph(self):
         with SummaryWriter(comment='ufnet', log_dir=self.log_dir) as sumw:
-            sumw.add_graph(self, (torch.rand((1,) + self.target_size), torch.rand((1,) + self.target_size)))
+            input_tensor_1 = torch.rand((1,) + self.target_size)
+            input_tensor_2 = torch.rand((1,) + self.target_size)
+            if self.use_cuda:
+                input_tensor_1, input_tensor_2 = input_tensor_1.cuda(), input_tensor_2.cuda()
+            sumw.add_graph(self, (input_tensor_1, input_tensor_2))
